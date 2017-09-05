@@ -18,8 +18,8 @@ public:
 
 	sf::Vector2f GetPosition();
 
-	bool CheckCollisionWith(sf::FloatRect&);
-	bool CheckCollisionWith(GameObject&);
+	//bool CheckCollisionWith(sf::FloatRect&);
+	int CheckCollisionWith(GameObject&);
 
 	int CheckCollisions();
 

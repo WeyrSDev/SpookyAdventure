@@ -21,11 +21,11 @@ int main()
 	float moveSpeed = 0.3f;
 
 	Player player({ 40,40 });
-	player.SetPosition({ 30,200 });
+	player.SetPosition({ 30,450 });
 
 	Platform platform01({ 400,40 });
-	//platform01.SetPosition({ 30,groundHeight+40 });
-	platform01.SetPosition({ 30, 300 });
+	platform01.SetPosition({ 30,groundHeight+40 });
+	//platform01.SetPosition({ 30, 300 });
 
 	sf::Vector2f velocity(sf::Vector2f(0, 0));
 
@@ -43,11 +43,11 @@ int main()
 			velocity.y += gravitySpeed;
 			//cout << "gravity applied" << endl;
 		}
-		else
-		{
-			isGrounded = true;
-			velocity.y = 0.0f;
-		}
+		//else
+		//{
+			//isGrounded = true;
+			//velocity.y = 0.0f;
+		//}
 
 
 		//INPUTS
@@ -84,7 +84,22 @@ int main()
 
 		player.Move(velocity);
 		//player.CheckCollisionWith(platform01.GetShape());
-		cout << player.CheckCollisionWith(platform01);
+
+		if(player.CheckCollisionWith(platform01) == 1)
+		{
+			cout << "Colliding at top " << endl;
+
+			velocity.y += jumpSpeed;
+		}
+
+		if (player.CheckCollisionWith(platform01) == 2)
+		{
+			cout << "Colliding at bottom " << endl;
+			isGrounded = true;
+			velocity.y = 0.0f;
+			//velocity.y += jumpSpeed;
+		}
+
 		//cout << player.CheckCollisions();
 		window.clear();
 		platform01.DrawTo(window);

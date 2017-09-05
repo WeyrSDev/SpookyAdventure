@@ -13,40 +13,35 @@ GameObject::GameObject()
 {
 }
 
-bool GameObject::CheckCollisionWith(sf::FloatRect& shape)
-{
-	bool isColliding = false;
-
-	isColliding = gameObjectShape.getGlobalBounds().intersects(shape);
-
-	int collisioFlag = 0;
-	if (gameObjectShape.getGlobalBounds().top)
-	{
-		std::cout << gameObjectShape.getGlobalBounds().top << std::endl;
-		collisioFlag = 1;
-	}
-	else if (gameObjectShape.getGlobalBounds().height)
-	{
-		collisioFlag = 2;
-	}
-
-	return isColliding;
-}
-
-bool GameObject::CheckCollisionWith(GameObject& other)
+int GameObject::CheckCollisionWith(GameObject& other)
 {
 	int collisioFlag = 0;
 
 	//std::cout << GetPosition().y << " "<< other.GetPosition().y << std::endl;
 
-	
-	if (GetPosition().y <= other.GetPosition().y && GetPosition().y >= other.GetPosition().y - other.GetShape().height)
+	//if (GetShape().top <= other.GetPosition().y &&  GetShape().top - GetShape().height >= other.GetPosition().y - other.GetShape().height)
+	float otherBottom, otherTop, pBottom, pTop;
+	float otherLeft, otherRight, pLeft, pRight;
+
+	pTop = GetShape().top;
+	pBottom = (GetShape().top + GetShape().height);
+
+	otherTop = other.GetShape().top;
+	otherBottom = (other.GetShape().top + GetShape().height);
+
+	otherLeft = other.GetShape().left;
+	otherRight = (other.GetShape().left + other.GetShape().width);
+
+	pLeft = GetShape().left;
+	pRight = (GetShape().left + GetShape().width);
+
+	if (pTop <= otherBottom && pTop > otherTop && pLeft >= otherLeft && pRight <= otherRight)
 	{
 		collisioFlag = 1;
 	}
-	if (GetPosition().y >= other.GetPosition().y && GetPosition().y <= other.GetPosition().y + other.GetShape().height)
+	else if (pBottom >= otherTop && pBottom < otherBottom && pLeft >= otherLeft && pRight <= otherRight)
 	{
-		collisioFlag = 2; // not working
+		collisioFlag = 2; 
 	}
 	return collisioFlag;
 }
