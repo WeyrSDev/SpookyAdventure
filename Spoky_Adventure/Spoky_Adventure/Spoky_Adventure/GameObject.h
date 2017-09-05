@@ -14,7 +14,8 @@ public:
 
 	void SetPosition(sf::Vector2f);
 
-	int GetYPosition();
+	float GetYPosition();
+	float GetXPosition();
 
 	sf::Vector2f GetPosition();
 
@@ -24,6 +25,8 @@ public:
 	int CheckCollisions();
 
 	sf::FloatRect GetShape();
+
+	void ChangeColour(sf::Color color);
 
 	~GameObject();
 

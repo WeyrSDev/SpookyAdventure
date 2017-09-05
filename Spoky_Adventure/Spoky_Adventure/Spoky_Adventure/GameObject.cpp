@@ -57,6 +57,11 @@ sf::FloatRect GameObject::GetShape()// should be get bounds object
 	return static_cast<sf::FloatRect>(bounds);
 }
 
+void GameObject::ChangeColour(sf::Color color)
+{
+	gameObjectShape.setFillColor(color);
+}
+
 void GameObject::DrawTo(sf::RenderWindow& window)
 {
 	window.draw(gameObjectShape);
@@ -72,9 +77,15 @@ void GameObject::SetPosition(sf::Vector2f newPos)
 	gameObjectShape.setPosition(newPos);
 }
 
-int GameObject::GetYPosition()
+float GameObject::GetYPosition()
 {
 	return gameObjectShape.getPosition().y;
+}
+
+float GameObject::GetXPosition()
+{
+	return gameObjectShape.getPosition().x;
+	//gameObjectShape.getOrigin()
 }
 
 sf::Vector2f GameObject::GetPosition()

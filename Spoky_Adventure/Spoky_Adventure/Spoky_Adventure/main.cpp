@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 #include <SFML/Graphics.hpp>
 #include "Player.h"
 #include "Platform.h"
@@ -7,11 +8,16 @@ using namespace std;
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(800, 600), "Spoky Adventure");
+	#define WINDOW_WIDTH 1280
+	#define WINDOW_HEIGHT 800
+
+	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Spooky Adventure");
 	
 	sf::Clock deltaClock;
 
-
+	std::vector<GameObject*> worldObjects(10);
+	
+	GameObject* FindClosestObject(std::vector<GameObject*>& objectList, GameObject* object);
 
 	bool isGrounded = false;
 
@@ -20,12 +26,27 @@ int main()
 	float jumpSpeed = 2.0f;
 	float moveSpeed = 0.3f;
 
-	Player player({ 40,40 });
-	player.SetPosition({ 30,450 });
+	Player* player = new Player({ 40,40 });
+	player->SetPosition({ 60,450 });
+	//player->SetPosition({ 450,450 });
 
-	Platform platform01({ 400,40 });
-	platform01.SetPosition({ 30,groundHeight+40 });
+	//Platform platform01({ 400,40 });
+	//platform01.SetPosition({ 30,groundHeight+40 });
 	//platform01.SetPosition({ 30, 300 });
+
+	for (int i = 0; i < 3; i++)
+	{
+		worldObjects[i] = new Platform({ 200,40 });
+		if (i == 0)
+		{
+
+			worldObjects[i]->SetPosition({ 30,WINDOW_HEIGHT - 40 });
+		}
+		else if(i>0)
+		{
+			worldObjects[i]->SetPosition(worldObjects[i - 1]->GetPosition() + sf::Vector2f({ 300,-100 }));
+		}
+	}
 
 	sf::Vector2f velocity(sf::Vector2f(0, 0));
 
@@ -37,12 +58,13 @@ int main()
 
 		//cout << "player pos : " << player.GetYPosition() << endl;
 		//GRAVITY
-		if (player.GetYPosition() < groundHeight)
-		{
-			isGrounded = false;
+		//if (player.GetYPosition() < groundHeight)
+		//{
+			//isGrounded = false;
+			if(isGrounded == false)
 			velocity.y += gravitySpeed;
 			//cout << "gravity applied" << endl;
-		}
+		//}
 		//else
 		//{
 			//isGrounded = true;
@@ -82,31 +104,83 @@ int main()
 			}
 		}
 
-		player.Move(velocity);
+		player->Move(velocity);
 		//player.CheckCollisionWith(platform01.GetShape());
 
-		if(player.CheckCollisionWith(platform01) == 1)
-		{
-			cout << "Colliding at top " << endl;
+		GameObject* closestObject = FindClosestObject(worldObjects, player);
 
-			velocity.y += jumpSpeed;
-		}
+	
 
-		if (player.CheckCollisionWith(platform01) == 2)
+		if (closestObject!= nullptr)
 		{
-			cout << "Colliding at bottom " << endl;
-			isGrounded = true;
-			velocity.y = 0.0f;
-			//velocity.y += jumpSpeed;
+			closestObject->ChangeColour(sf::Color::Magenta);
+
+			if (player->CheckCollisionWith(*closestObject) == 1)
+			{
+				//cout << "Colliding at top " << endl;
+
+				velocity.y += jumpSpeed;
+			}
+
+			if (player->CheckCollisionWith(*closestObject) == 2)
+			{
+				//cout << "Colliding at bottom " << endl;
+				isGrounded = true;
+				velocity.y = 0.0f;
+				//velocity.y += jumpSpeed;
+			}
+			else
+			{
+				isGrounded = false;
+			}
 		}
 
 		//cout << player.CheckCollisions();
 		window.clear();
-		platform01.DrawTo(window);
-		player.DrawTo(window);
+		//platform01.DrawTo(window);
+		for (int i = 0; i < 3; i++)
+		{
+			worldObjects[i]->DrawTo(window);
+		}
+
+		player->DrawTo(window);
 
 		window.display();
 	}
 
 	return 0;
+}
+
+GameObject* FindClosestObject(std::vector<GameObject*>& objectList, GameObject* object)
+{
+	double tempDistance = 0;
+	double closestDistance = (float)1e10;
+
+	GameObject* closestObject = nullptr;
+
+	int x1, x2, y1, y2;
+
+	for (int i = 0; i < 3; i++)
+	{
+		y1 = object->GetYPosition();
+		y2 = objectList[i]->GetYPosition();
+		x1 = object->GetXPosition();
+		x2 = objectList[i]->GetXPosition();
+
+		int distanceX = (x2 - x1) * (x2 - x1);
+		int distanceY = (y2 - y1) * (y2 - y1);
+
+		tempDistance = sqrt(distanceX - distanceY);
+
+		if (tempDistance < closestDistance)
+		{
+			closestDistance = tempDistance;
+			closestObject = objectList[i];
+		}
+
+	}
+
+	//cout << "closest pos: " << closestObject->GetPosition().x << "player pos: " << object->GetPosition().x << endl;
+
+	return closestObject;
 }
