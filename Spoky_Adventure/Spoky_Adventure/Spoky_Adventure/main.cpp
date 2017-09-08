@@ -15,6 +15,8 @@ int main()
 	
 	sf::Clock deltaClock;
 
+	window.setFramerateLimit(60);
+
 	std::vector<GameObject*> worldObjects(10);
 	
 	GameObject* FindClosestObject(std::vector<GameObject*>& objectList, GameObject* object);
@@ -22,9 +24,9 @@ int main()
 	bool isGrounded = false;
 
 	const int groundHeight = 500;
-	const float gravitySpeed = 0.005f;
-	float jumpSpeed = 2.0f;
-	float moveSpeed = 0.3f;
+	const float gravitySpeed = 0.009f;
+	float jumpSpeed = 0.5f;
+	float moveSpeed = 0.2f;
 
 	Player* player = new Player({ 40,40 });
 	player->SetPosition({ 60,450 });
@@ -54,42 +56,37 @@ int main()
 	{
 		sf::Event event;
 
-		//mySprite.Move(velocity * dt.AsSeconds());
 
-		//cout << "player pos : " << player.GetYPosition() << endl;
+		sf::Time time = deltaClock.getElapsedTime();
+		float delta = time.asMilliseconds();
+
 		//GRAVITY
-		//if (player.GetYPosition() < groundHeight)
-		//{
-			//isGrounded = false;
-			if(isGrounded == false)
-			velocity.y += gravitySpeed;
-			//cout << "gravity applied" << endl;
-		//}
-		//else
-		//{
-			//isGrounded = true;
-			//velocity.y = 0.0f;
-		//}
+		if (isGrounded == false)
+			velocity.y += (gravitySpeed * delta);
+		if (velocity.y > 8)
+		{
+			velocity.y = 8;
+		}
+			cout << "Velocity Y is: " << velocity.y << endl;
 
 
 		//INPUTS
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 		{
 			if(isGrounded)
-			velocity.y = -jumpSpeed;
+			velocity.y = -jumpSpeed * delta;
 				//cout << "jump pressed " << endl;
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		{
-			if (isGrounded)
-				velocity.x = -moveSpeed;
+				velocity.x = -moveSpeed * delta;
 			//cout << "jump pressed " << endl;
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 		{
-				velocity.x = moveSpeed;
+				velocity.x = moveSpeed * delta;
 			//cout << "jump pressed " << endl;
 		}
 
@@ -106,6 +103,8 @@ int main()
 
 		player->Move(velocity);
 		//player.CheckCollisionWith(platform01.GetShape());
+		deltaClock.restart().asMilliseconds();
+
 
 		GameObject* closestObject = FindClosestObject(worldObjects, player);
 
@@ -127,7 +126,6 @@ int main()
 				//cout << "Colliding at bottom " << endl;
 				isGrounded = true;
 				velocity.y = 0.0f;
-				//velocity.y += jumpSpeed;
 			}
 			else
 			{
@@ -146,6 +144,8 @@ int main()
 		player->DrawTo(window);
 
 		window.display();
+
+
 	}
 
 	return 0;
