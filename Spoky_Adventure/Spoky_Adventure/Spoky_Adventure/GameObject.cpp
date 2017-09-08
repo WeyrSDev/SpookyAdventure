@@ -5,7 +5,7 @@ GameObject::GameObject(sf::Vector2f size)
 {
 	gameObjectShape.setSize(size);
 	gameObjectShape.setFillColor(sf::Color::Green);
-
+	objectTag = "GameObject";
 	//gameObjectShape.getGlobalBounds().intersects()
 }
 
@@ -43,6 +43,9 @@ int GameObject::CheckCollisionWith(GameObject& other)
 	{
 		collisioFlag = 2; 
 	}
+	//TODO IMPLEMENT collision from left and right
+
+
 	return collisioFlag;
 }
 
@@ -60,6 +63,11 @@ sf::FloatRect GameObject::GetShape()// should be get bounds object
 void GameObject::ChangeColour(sf::Color color)
 {
 	gameObjectShape.setFillColor(color);
+}
+
+std::string GameObject::GetObjectTag()
+{
+	return objectTag;
 }
 
 void GameObject::DrawTo(sf::RenderWindow& window)

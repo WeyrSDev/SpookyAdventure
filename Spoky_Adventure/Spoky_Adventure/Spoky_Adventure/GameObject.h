@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
+
 class GameObject
 {
 public:
@@ -28,9 +29,13 @@ public:
 
 	void ChangeColour(sf::Color color);
 
+	std::string GetObjectTag();
+
 	~GameObject();
 
 protected:
 	sf::RectangleShape gameObjectShape;
+
+	std::string objectTag;
 };
 
