@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "World.h"
 
 Player::Player(sf::Vector2f size, World& world)
 {
@@ -10,8 +11,8 @@ Player::Player(sf::Vector2f size, World& world)
 	gravityEnabled = true; // Enable object gravity
 
 	isGrounded = false;
-	float jumpSpeed = 550;
-	float moveSpeed = 0.001f;
+	jumpSpeed = 550;
+	moveSpeed = 130.0f;
 
 	gravitySpeed = 2.0f;
 
@@ -31,23 +32,81 @@ void Player::Update(float deltaTime)
 	// DO THIS EVERY FRAME
 	//std::cout << "PLAYER UPDATE CALLED" << std::endl;
 
+	if (isGrounded) // apply friction if grounded
+	{
+		if (velocity.x > 0)
+		{
+			velocity.x -= 2.07f * delta;
+		}
+
+		if (velocity.x < 0)
+		{
+			velocity.x += 2.07f * delta;
+		}
+	}
+
+	if (isGrounded == false)
+	{
+		if (velocity.x > 0)
+		{
+			velocity.x -= 1.07f * delta;
+		}
+
+		if (velocity.x < 0)
+		{
+			velocity.x += 1.07f * delta;
+		}
+	}
+
+	GameObject* closestObject = nullptr;
+
+	// Get closest object
+	if (world)
+	{
+		closestObject = world->FindClosestObject(this);
+	}
+
+
+	if (closestObject) // if colliding simple collision
+	{
+		if (this->CheckCollisionWith(*closestObject) > 0)
+		{
+			// PICK UP COLLECTABLE
+			std::cout << "pick up" << std::endl;
+			// erase the 6th element
+			if (closestObject->GetObjectTag() == "Collectable")
+			{
+				for (int i = 0; i < world->GetWorldObjectCount(); i++)
+				{
+					if (world->GetWorldObjectList()[i] == closestObject)
+					{
+						world->DestroyObjectAt(i);
+					}
+				}
+			}
+		}
+	}
+
 }
 
 void Player::Jump()
 {
 	if (isGrounded)
 	{
-		velocity.y = (-jumpSpeed) * delta;
+		//velocity.y = (-jumpSpeed) * delta;
+		isGrounded = false;
+		velocity.y = -gravitySpeed *1.5f;
 		std::cout << "Player jumped" << std::endl;
 	}
 }
 
 void Player::MoveRight()
 {
-	//velocity.x += moveSpeed * delta;
+	std::cout << "Player move right" << std::endl;
+	velocity.x = moveSpeed * delta;
 }
 
 void Player::MoveLeft()
 {
-	//velocity.x = -moveSpeed * delta;
+	velocity.x = -moveSpeed * delta;
 }

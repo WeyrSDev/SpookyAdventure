@@ -63,34 +63,10 @@ int main()
 
 		deltaClock.restart().asSeconds();
 
-		/* 
 
-
-			//if (world->GetPlayer()->CheckCollisionWith(*closestObject) > 0) // if colliding simple collision
-			{
-				if (closestObject->GetObjectTag() == "Collectable")
-				{
-					// PICK UP COLLECTABLE
-					cout << "pick up" << endl;
-					// erase the 6th element
-
-					for (int i = 0; i < worldObjectCount; i++)
-					{
-						if (worldObjects[i] == closestObject)
-						{
-							worldObjects.erase(worldObjects.begin() + i);
-							worldObjectCount--;
-						}
-					}
-					
-
-				}
-			}
-		}*/
-
-		//if (world->GetPlayer()->GetXPosition() > view.getCenter().y)
+		if (world->GetPlayer()->GetXPosition() > view.getCenter().y)
 		{
-			//view.move(sf::Vector2f({ velocity.x, velocity.y / 2 }));
+			view.move(sf::Vector2f({ world->GetPlayer()->GetVelocity().x, world->GetPlayer()->GetVelocity().y / 2 }));
 		}
 
 		window.setView(view);

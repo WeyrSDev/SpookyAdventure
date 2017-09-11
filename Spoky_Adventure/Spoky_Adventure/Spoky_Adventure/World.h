@@ -19,5 +19,7 @@ public:
 
 	int GetWorldObjectCount();
 	std::vector<GameObject*> GetWorldObjectList();
+
+	void DestroyObjectAt(int i);
 };
 

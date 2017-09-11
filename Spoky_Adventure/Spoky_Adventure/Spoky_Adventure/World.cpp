@@ -93,3 +93,9 @@ std::vector<GameObject*> World::GetWorldObjectList()
 {
 	return worldObjects;
 }
+
+void World::DestroyObjectAt(int i)
+{
+	worldObjects.erase(worldObjects.begin() + i);
+	worldObjectCount--;
+}
