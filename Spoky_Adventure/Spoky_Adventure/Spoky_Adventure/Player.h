@@ -4,7 +4,7 @@
 class Player : public GameObject
 {
 public:
-	Player(sf::Vector2f);
+	Player(sf::Vector2f, World& world);
 	~Player();
 
 	float jumpSpeed;

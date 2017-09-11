@@ -8,7 +8,7 @@
 World::World()
 {
 
-	player = new Player({ 40,40 });
+	player = new Player({ 40,40 }, *this);
 	player->SetPosition({ 60,450 });
 
 	for (int i = worldObjectCount; i < 5; i++)
@@ -40,7 +40,7 @@ World::~World()
 {
 }
 
-GameObject * World::FindClosestObject(std::vector<GameObject*>& objectList, GameObject * object)
+GameObject * World::FindClosestObject(GameObject * object)
 {
 	double tempDistance = 0;
 	double closestDistance = (float)1e10;
@@ -51,15 +51,15 @@ GameObject * World::FindClosestObject(std::vector<GameObject*>& objectList, Game
 
 	for (int i = 0; i < worldObjectCount; i++) // TODO CHANGE TO GET WORLD Objects COUNT
 	{
-		if (objectList[i] == nullptr)
+		if (worldObjects[i] == nullptr)
 		{
 			continue;
 		}
 
 		y1 = object->GetYPosition();
-		y2 = objectList[i]->GetYPosition();
+		y2 = worldObjects[i]->GetYPosition();
 		x1 = object->GetXPosition();
-		x2 = objectList[i]->GetXPosition();
+		x2 = worldObjects[i]->GetXPosition();
 
 		int distanceX = (x2 - x1) * (x2 - x1);
 		int distanceY = (y2 - y1) * (y2 - y1);
@@ -69,7 +69,7 @@ GameObject * World::FindClosestObject(std::vector<GameObject*>& objectList, Game
 		if (tempDistance < closestDistance)
 		{
 			closestDistance = tempDistance;
-			closestObject = objectList[i];
+			closestObject = worldObjects[i];
 		}
 
 	}
@@ -82,4 +82,14 @@ GameObject * World::FindClosestObject(std::vector<GameObject*>& objectList, Game
 Player * World::GetPlayer()
 {
 	return player;
+}
+
+int World::GetWorldObjectCount()
+{
+	return worldObjectCount;
+}
+
+std::vector<GameObject*> World::GetWorldObjectList()
+{
+	return worldObjects;
 }

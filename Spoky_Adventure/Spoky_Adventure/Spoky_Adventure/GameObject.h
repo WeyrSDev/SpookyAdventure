@@ -2,11 +2,12 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
+class World;
 
 class GameObject
 {
 public:
-	GameObject(sf::Vector2f);
+	GameObject(sf::Vector2f size, World& world);
 
 	GameObject();
 
@@ -50,5 +51,7 @@ protected:
 	sf::RectangleShape gameObjectShape;
 
 	std::string objectTag;
+
+	World* world;
 };
 

@@ -1,8 +1,12 @@
 #include "GameObject.h"
 #include <iostream>
+#include "World.h"
 
-GameObject::GameObject(sf::Vector2f size) // get reference to world when spawned // which instance of world spawned this object
+GameObject::GameObject(sf::Vector2f size, World& world) // get reference to world when spawned // which instance of world spawned this object
 {
+	std::cout << "GameObject Constructor called" << std::endl;
+	this->world = &world;
+
 	gravityEnabled = false;
 	gravitySpeed = 1.0f;
 
@@ -86,28 +90,64 @@ void GameObject::Update(float deltaTime)
 {
 	delta = deltaTime;
 
-
-	
 	//APPLY GRAVITY
 	if (gravityEnabled)
 	{
 		if (isGrounded == false)
 			velocity.y += (gravitySpeed * delta);
-		if (velocity.y > 8)
-		{
-			velocity.y = 8;
-		}
+		//if (velocity.y > 8)
+		//{
+		//	velocity.y = 8;
+		//}
 	}
 	Move(velocity);
 	//Move(sf::Vector2f({ 0,5 }));
 
 	//std::cout << "dt is: " << delta << std::endl;
-	std::cout << "velocity is: " << velocity.y << std::endl;
+	//std::cout << "velocity is: " << velocity.y << std::endl;
 
-	// Get world object list
+	GameObject* closestObject = nullptr;
 
-	// for this object check collision with each world object
+	// Get closest object
+ 	if (world)
+	{
+		closestObject = world->FindClosestObject(this);
+	}
 
+	// = world->FindClosestObject(worldObjects, world->GetPlayer());
+
+	// for this object check collision with closest world object
+
+
+	if (closestObject != nullptr)
+	{
+		closestObject->ChangeColour(sf::Color::Magenta);
+
+		if (this->CheckCollisionWith(*closestObject) == 1)
+		{
+			//cout << "Colliding at top " << endl;
+			if (closestObject->GetObjectTag() == "Platform")
+			{
+				//velocity.y += jumpSpeed;
+			}
+		}
+
+		if (this->CheckCollisionWith(*closestObject) == 2)
+		{
+			std::cout << "Colliding at bottom " << std::endl;
+			if (closestObject->GetObjectTag() == "Platform")
+			{
+				isGrounded = true;
+				velocity.y = 0.0f;
+				closestObject->ChangeColour(sf::Color::Magenta);
+			}
+		}
+		else
+		{
+			closestObject->ChangeColour(sf::Color::Green);
+			//isGrounded = false;
+		}
+	}
 
 	// do approriate action
 }

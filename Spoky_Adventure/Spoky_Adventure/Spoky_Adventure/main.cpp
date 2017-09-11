@@ -65,43 +65,6 @@ int main()
 
 		/* 
 
-		//player->Move(velocity);
-
-		GameObject* closestObject = nullptr;// = world->FindClosestObject(worldObjects, world->GetPlayer());
-
-
-		if (closestObject != nullptr)
-		{
-			closestObject->ChangeColour(sf::Color::Magenta);
-
-			//if (world->GetPlayer()->CheckCollisionWith(*closestObject) == 1)
-			{
-				//cout << "Colliding at top " << endl;
-				if (closestObject->GetObjectTag() == "Platform")
-				{
-					//velocity.y += jumpSpeed;
-				}
-
-
-
-			}
-
-			//if (world->GetPlayer()->CheckCollisionWith(*closestObject) == 2)
-			{
-				//cout << "Colliding at bottom " << endl;
-				if (closestObject->GetObjectTag() == "Platform")
-				{
-					//isGrounded = true;
-					//velocity.y = 0.0f;
-				}
-
-
-
-			}
-			else
-			{
-				//isGrounded = false;
-			}
 
 			//if (world->GetPlayer()->CheckCollisionWith(*closestObject) > 0) // if colliding simple collision
 			{
@@ -145,16 +108,15 @@ int main()
 		}
 
 ;
-		//player.CheckCollisionWith(platform01.GetShape());
-	
-
-		//cout << player.CheckCollisions();
 		window.clear();
-		//platform01.DrawTo(window);
-		//for (int i = 0; i < worldObjectCount; i++)
-		//{
-			//worldObjects[i]->DrawTo(window);
-		//}
+
+		if (world)
+		{
+			for (int i = 0; i < world->GetWorldObjectCount(); i++)
+			{
+				world->GetWorldObjectList()[i]->DrawTo(window);
+			}
+		}
 
 		if (world->GetPlayer() != nullptr)
 		{

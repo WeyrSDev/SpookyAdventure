@@ -13,8 +13,11 @@ public:
 	World();
 	~World();
 
-	GameObject* FindClosestObject(std::vector<GameObject*>& objectList, GameObject* object);
+	GameObject* FindClosestObject(GameObject* object);
 
 	Player* GetPlayer();
+
+	int GetWorldObjectCount();
+	std::vector<GameObject*> GetWorldObjectList();
 };
 
