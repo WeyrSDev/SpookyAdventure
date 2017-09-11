@@ -69,6 +69,7 @@ int main()
 			view.move(sf::Vector2f({ world->GetPlayer()->GetVelocity().x, world->GetPlayer()->GetVelocity().y / 2 }));
 		}
 
+
 		window.setView(view);
 
 
@@ -86,13 +87,15 @@ int main()
 ;
 		window.clear();
 
-		if (world)
-		{
-			for (int i = 0; i < world->GetWorldObjectCount(); i++)
+
+			if (world)
 			{
-				world->GetWorldObjectList()[i]->DrawTo(window);
+				for (int i = 0; i < world->GetWorldObjectCount(); i++)
+				{
+						world->GetWorldObjectList()[i]->DrawTo(window);
+				}
 			}
-		}
+
 
 		if (world->GetPlayer() != nullptr)
 		{

@@ -11,10 +11,10 @@ Player::Player(sf::Vector2f size, World& world)
 	gravityEnabled = true; // Enable object gravity
 
 	isGrounded = false;
-	jumpSpeed = 550;
+	jumpSpeed = 3.0f;
 	moveSpeed = 130.0f;
 
-	gravitySpeed = 2.0f;
+	gravitySpeed = 3.0f;
 
 	gameObjectShape.setSize(size);
 	gameObjectShape.setFillColor(sf::Color::Red);
@@ -71,8 +71,6 @@ void Player::Update(float deltaTime)
 	{
 		if (this->CheckCollisionWith(*closestObject) > 0)
 		{
-			// PICK UP COLLECTABLE
-			std::cout << "pick up" << std::endl;
 			// erase the 6th element
 			if (closestObject->GetObjectTag() == "Collectable")
 			{
@@ -80,6 +78,8 @@ void Player::Update(float deltaTime)
 				{
 					if (world->GetWorldObjectList()[i] == closestObject)
 					{
+						// PICK UP COLLECTABLE
+						std::cout << "pick up" << std::endl;
 						world->DestroyObjectAt(i);
 					}
 				}
@@ -95,7 +95,8 @@ void Player::Jump()
 	{
 		//velocity.y = (-jumpSpeed) * delta;
 		isGrounded = false;
-		velocity.y = -gravitySpeed *1.5f;
+		//velocity.y = -gravitySpeed *1.5f;
+		velocity.y = -jumpSpeed;
 		std::cout << "Player jumped" << std::endl;
 	}
 }

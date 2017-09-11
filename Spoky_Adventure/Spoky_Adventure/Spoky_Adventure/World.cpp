@@ -11,11 +11,13 @@ World::World()
 	player = new Player({ 40,40 }, *this);
 	player->SetPosition({ 60,450 });
 
+	// SPAWN PLATFORMS
 	for (int i = worldObjectCount; i < 5; i++)
 	{
 		//worldObjects[i] = new Platform({ 200,40 });
 		worldObjects.push_back(new Platform({ 200,40 }));
 		worldObjectCount++;
+		
 		if (i == 0)
 		{
 			worldObjects.at(i)->SetPosition({ 30,WINDOW_HEIGHT - 40 });
@@ -27,12 +29,21 @@ World::World()
 	}
 
 	// SPAWN COLLECTABLES
-	for (int i = worldObjectCount; i < 8; i++)
+	for (int i = 0; i < worldObjectCount; i++)
 	{
-		worldObjectCount++;
-		worldObjects.push_back(new Collectable({ 50,50 }));
-		worldObjects.at(i)->SetPosition({ 100,WINDOW_HEIGHT - 300 });
+		if (worldObjects[i]->GetObjectTag() == "Platform")
+		{
+			worldObjectCount++;
+			worldObjects.push_back(new Collectable({ 50,50 }));
+
+			sf::Vector2f position = sf::Vector2f({ worldObjects[i]->GetShape().width /2, -100 });
+			position += worldObjects[i]->GetPosition();
+			worldObjects.back()->SetPosition(position);
+		}
 	}
+
+
+
 }
 
 

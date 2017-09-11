@@ -8,7 +8,7 @@ GameObject::GameObject(sf::Vector2f size, World& world) // get reference to worl
 	this->world = &world;
 
 	gravityEnabled = false;
-	gravitySpeed = 1.0f;
+	gravitySpeed = 2.0f;
 
 	isGrounded = false;
 
@@ -145,7 +145,7 @@ void GameObject::Update(float deltaTime)
 		else
 		{
 			closestObject->ChangeColour(sf::Color::Green);
-			//isGrounded = false;
+			isGrounded = false;
 		}
 	}
 
