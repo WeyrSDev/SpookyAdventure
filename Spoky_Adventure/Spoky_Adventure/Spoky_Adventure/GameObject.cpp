@@ -1,8 +1,15 @@
 #include "GameObject.h"
 #include <iostream>
 
-GameObject::GameObject(sf::Vector2f size)
+GameObject::GameObject(sf::Vector2f size) // get reference to world when spawned // which instance of world spawned this object
 {
+	gravityEnabled = false;
+	gravitySpeed = 1.0f;
+
+	isGrounded = false;
+
+	velocity = sf::Vector2f(0, 0);
+
 	gameObjectShape.setSize(size);
 	gameObjectShape.setFillColor(sf::Color::Green);
 	objectTag = "GameObject";
@@ -68,6 +75,41 @@ void GameObject::ChangeColour(sf::Color color)
 std::string GameObject::GetObjectTag()
 {
 	return objectTag;
+}
+
+sf::Vector2f GameObject::GetVelocity()
+{
+	return velocity;
+}
+
+void GameObject::Update(float deltaTime)
+{
+	delta = deltaTime;
+
+
+	
+	//APPLY GRAVITY
+	if (gravityEnabled)
+	{
+		if (isGrounded == false)
+			velocity.y += (gravitySpeed * delta);
+		if (velocity.y > 8)
+		{
+			velocity.y = 8;
+		}
+	}
+	Move(velocity);
+	//Move(sf::Vector2f({ 0,5 }));
+
+	//std::cout << "dt is: " << delta << std::endl;
+	std::cout << "velocity is: " << velocity.y << std::endl;
+
+	// Get world object list
+
+	// for this object check collision with each world object
+
+
+	// do approriate action
 }
 
 void GameObject::DrawTo(sf::RenderWindow& window)
