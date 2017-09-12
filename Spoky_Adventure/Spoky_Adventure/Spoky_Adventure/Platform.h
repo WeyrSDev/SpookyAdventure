@@ -4,7 +4,7 @@
 class Platform : public GameObject
 {
 public:
-	Platform(sf::Vector2f);
+	Platform(sf::Vector2f, World& world);
 	~Platform();
 };
 

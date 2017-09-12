@@ -23,10 +23,13 @@ int main()
 
 	float viewCentreY = (WINDOW_HEIGHT / 2);
 	window.setFramerateLimit(120);
+	// Get elapsed time
+	//float ElapsedTime = window.GetFrameTime();
 
 	sf::Clock deltaClock;
 
 	World* world = new World();
+
 
 	while (window.isOpen())
 	{
@@ -36,9 +39,11 @@ int main()
 		sf::Time time = deltaClock.getElapsedTime();
 		float delta = time.asSeconds();
 
-		world->GetPlayer()->Update(delta);
+		for (int i = 0; i < world->GetWorldObjectCount(); i++)
+		{
+			world->GetWorldObjectList()[i]->Update(delta);
+		}
 
-		
 
 		//INPUTS
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
@@ -61,14 +66,14 @@ int main()
 			//cout << "jump pressed " << endl;
 		}
 
-		deltaClock.restart().asSeconds();
+
 
 
 		if (world->GetPlayer()->GetXPosition() > view.getCenter().y)
 		{
 			view.move(sf::Vector2f({ world->GetPlayer()->GetVelocity().x, world->GetPlayer()->GetVelocity().y / 2 }));
 		}
-
+		deltaClock.restart().asSeconds();
 
 		window.setView(view);
 
@@ -78,14 +83,7 @@ int main()
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
-			if (event.type == sf::Event::KeyReleased)
-			{
-				//velocity.x = 0;
-			}
 		}
-
-;
-		window.clear();
 
 
 			if (world)
@@ -97,12 +95,8 @@ int main()
 			}
 
 
-		if (world->GetPlayer() != nullptr)
-		{
-			world->GetPlayer()->DrawTo(window);
-		}
 		window.display();
-
+		window.clear();
 
 
 		

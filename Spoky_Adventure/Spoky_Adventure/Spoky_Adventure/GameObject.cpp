@@ -4,18 +4,29 @@
 
 GameObject::GameObject(sf::Vector2f size, World& world) // get reference to world when spawned // which instance of world spawned this object
 {
+
+
 	std::cout << "GameObject Constructor called" << std::endl;
+
+	if (!objectTexture.loadFromFile("wood.jpeg"))
+		throw std::runtime_error("Could not load fighter jet.png");
+
+	objectSprite.setOrigin(sf::Vector2f(objectSprite.getGlobalBounds().width / 2, objectSprite.getGlobalBounds().top));
+
 	this->world = &world;
 
 	gravityEnabled = false;
-	gravitySpeed = 3.0f;
+	//gravitySpeed = 3.0f;
+	gravitySpeed = 70.0f;
 
 	isGrounded = false;
 
 	velocity = sf::Vector2f(0, 0);
 
-	gameObjectShape.setSize(size);
-	gameObjectShape.setFillColor(sf::Color::Green);
+	//gameObjectShape.setSize(size);
+	objectSprite.setScale(size);
+	//objectSprite.setTexture(objectTexture);
+	objectSprite.setColor(sf::Color::Green);
 	objectTag = "GameObject";
 	//gameObjectShape.getGlobalBounds().intersects()
 }
@@ -33,18 +44,19 @@ int GameObject::CheckCollisionWith(GameObject& other)
 	//if (GetShape().top <= other.GetPosition().y &&  GetShape().top - GetShape().height >= other.GetPosition().y - other.GetShape().height)
 	float otherBottom, otherTop, pBottom, pTop;
 	float otherLeft, otherRight, pLeft, pRight;
+	float offset = 3;
 
-	pTop = GetShape().top;
-	pBottom = (GetShape().top + GetShape().height);
+	pTop = GetShape().top - offset;
+	pBottom = (GetShape().top + GetShape().height) + offset;
 
-	otherTop = other.GetShape().top;
-	otherBottom = (other.GetShape().top + GetShape().height);
+	otherTop = other.GetShape().top - offset;
+	otherBottom = (other.GetShape().top + GetShape().height) + offset;
 
-	otherLeft = other.GetShape().left;
-	otherRight = (other.GetShape().left + other.GetShape().width);
+	otherLeft = other.GetShape().left - offset;
+	otherRight = (other.GetShape().left + other.GetShape().width) + offset;
 
-	pLeft = GetShape().left;
-	pRight = (GetShape().left + GetShape().width);
+	pLeft = GetShape().left - offset;
+	pRight = (GetShape().left + GetShape().width) + offset;
 
 	if (pTop <= otherBottom && pTop > otherTop && pLeft >= otherLeft && pRight <= otherRight)
 	{
@@ -67,13 +79,13 @@ int GameObject::CheckCollisions()
 
 sf::FloatRect GameObject::GetShape()// should be get bounds object
 {
-	auto bounds = gameObjectShape.getGlobalBounds();
+	auto bounds = objectSprite.getGlobalBounds();
 	return static_cast<sf::FloatRect>(bounds);
 }
 
 void GameObject::ChangeColour(sf::Color color)
 {
-	gameObjectShape.setFillColor(color);
+	objectSprite.setColor(color);
 }
 
 std::string GameObject::GetObjectTag()
@@ -106,81 +118,105 @@ void GameObject::Update(float deltaTime)
 	//std::cout << "dt is: " << delta << std::endl;
 	//std::cout << "velocity is: " << velocity.y << std::endl;
 
-	GameObject* closestObject = nullptr;
+	//GameObject* closestObject = nullptr;
 
 	// Get closest object
  	if (world)
 	{
-		closestObject = world->FindClosestObject(this);
+		//closestObject = world->FindClosestObject(this);
+
+		for (int i = 0; i < 3; i++)
+		{
+			if (i > 0)
+			{
+				if (world->FindClosestObject(this) != closestObjects[i -1])
+				{
+					if(world->FindClosestObject(this) != closestObjects[i])
+					closestObjects[i] = world->FindClosestObject(this);
+				}
+			}
+			else
+				closestObjects[i] = world->FindClosestObject(this);
+		}
 	}
 
 	// = world->FindClosestObject(worldObjects, world->GetPlayer());
 
 	// for this object check collision with closest world object
 
-
-	if (closestObject != nullptr)
+	for (int i = 0; i < 3; i++)
 	{
-		closestObject->ChangeColour(sf::Color::Magenta);
+		if (closestObjects[i] != nullptr)
+		{
+			//closestObject->ChangeColour(sf::Color::Magenta);
 
-		if (this->CheckCollisionWith(*closestObject) == 1)
-		{
-			//cout << "Colliding at top " << endl;
-			if (closestObject->GetObjectTag() == "Platform")
+			if (this->CheckCollisionWith(*closestObjects[i]) == 1)
 			{
-				//velocity.y += jumpSpeed;
+				//cout << "Colliding at top " << endl;
+				if (closestObjects[i]->GetObjectTag() == "Platform")
+				{
+					//velocity.y += jumpSpeed;
+				}
 			}
-		}
 
-		if (this->CheckCollisionWith(*closestObject) == 2)
-		{
-			std::cout << "Colliding at bottom " << std::endl;
-			if (closestObject->GetObjectTag() == "Platform")
+			if (this->CheckCollisionWith(*closestObjects[i]) == 2)
 			{
-				isGrounded = true;
-				velocity.y = 0.0f;
-				closestObject->ChangeColour(sf::Color::Magenta);
+				//std::cout << "Colliding at bottom " << std::endl;
+				//if (closestObjects[i]->GetObjectTag() == "Platform")
+				//{
+				if(gravityEnabled)
+				{
+					if (velocity.y > 0)
+					{
+						velocity.y = velocity.y / 2;
+					}
+					isGrounded = true;
+					//closestObjects[0]->ChangeColour(sf::Color::Magenta);
+				}
 			}
-		}
-		else
-		{
-			closestObject->ChangeColour(sf::Color::Green);
-			isGrounded = false;
+			else
+			{
+				if (closestObjects[i]->GetObjectTag() == "Platform")
+				{
+					//closestObjects[i]->ChangeColour(sf::Color::Green);
+					isGrounded = false;
+				}
+			}
 		}
 	}
-
 	// do approriate action
 }
 
 void GameObject::DrawTo(sf::RenderWindow& window)
 {
-	window.draw(gameObjectShape);
+	window.draw(objectSprite);
 }
 
 void GameObject::Move(sf::Vector2f distance)
 {
-	gameObjectShape.move(distance);
+	objectSprite.move(distance);
 }
 
 void GameObject::SetPosition(sf::Vector2f newPos)
 {
-	gameObjectShape.setPosition(newPos);
+	objectSprite.setPosition(newPos);
 }
 
 float GameObject::GetYPosition()
 {
-	return gameObjectShape.getPosition().y;
+	return objectSprite.getPosition().y;
 }
 
 float GameObject::GetXPosition()
 {
-	return gameObjectShape.getPosition().x;
+	return objectSprite.getPosition().x;
+	//return gameObjectShape.getPosition().x;
 	//gameObjectShape.getOrigin()
 }
 
 sf::Vector2f GameObject::GetPosition()
 {
-	return gameObjectShape.getPosition();
+	return objectSprite.getPosition();
 }
 
 

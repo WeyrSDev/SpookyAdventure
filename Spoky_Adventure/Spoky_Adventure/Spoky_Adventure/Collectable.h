@@ -3,7 +3,7 @@
 class Collectable : public GameObject
 {
 public:
-	Collectable(sf::Vector2f);
+	Collectable(sf::Vector2f,World&);
 	~Collectable();
 };
 

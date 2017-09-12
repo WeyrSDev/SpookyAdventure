@@ -3,21 +3,32 @@
 
 Player::Player(sf::Vector2f size, World& world)
 {
-	//GameObject::GameObject(size, world); // call parent constructor 
+	GameObject::GameObject(size, world); // call parent constructor 
 
 	this->world = &world;
 
+
 	std::cout << "Player Constructor called" << std::endl;
+
+	if (!objectTexture.loadFromFile("wood.jpeg"))
+		throw std::runtime_error("Could not load fighter jet.png");
+
+
 	gravityEnabled = true; // Enable object gravity
 
 	isGrounded = false;
-	jumpSpeed = 3.0f;
+	//jumpSpeed = 3.0f;
+	jumpSpeed = 430.0f;
 	moveSpeed = 130.0f;
 
-	gravitySpeed = 3.0f;
+	//gravitySpeed = 3.0f;
+	gravitySpeed = 2.7f;
 
-	gameObjectShape.setSize(size);
-	gameObjectShape.setFillColor(sf::Color::Red);
+
+	objectSprite.setTexture(objectTexture);
+
+	objectSprite.setScale(size);
+	objectSprite.setColor(sf::Color::Red);
 
 	objectTag = "Player";
 }

@@ -48,10 +48,15 @@ protected:
 
 	float delta = 0;
 
-	sf::RectangleShape gameObjectShape;
+	//sf::Sprite gameObjectShape;
 
 	std::string objectTag;
 
 	World* world;
+
+	GameObject* closestObjects [3];
+
+	sf::Sprite objectSprite;
+	sf::Texture objectTexture;
 };
 

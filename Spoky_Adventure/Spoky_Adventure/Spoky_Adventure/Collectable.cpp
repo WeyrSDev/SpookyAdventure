@@ -2,10 +2,16 @@
 
 
 
-Collectable::Collectable(sf::Vector2f size)
+Collectable::Collectable(sf::Vector2f size, World& world)
 {
-	gameObjectShape.setSize(size);
-	gameObjectShape.setFillColor(sf::Color::Blue);
+	GameObject::GameObject(size, world); // call parent constructor 
+
+	if (!objectTexture.loadFromFile("wood.jpeg"))
+		throw std::runtime_error("Could not load fighter jet.png");
+
+	objectSprite.setScale(size);
+	objectSprite.setTexture(objectTexture);
+	objectSprite.setColor(sf::Color::Blue);
 
 	objectTag = "Collectable";
 }

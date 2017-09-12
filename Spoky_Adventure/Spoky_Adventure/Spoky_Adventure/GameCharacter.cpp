@@ -12,12 +12,12 @@ GameCharacter::GameCharacter(sf::Vector2f size, World & world)
 
 	isGrounded = false;
 	jumpSpeed = 3.0f;
-	moveSpeed = 130.0f;
+	moveSpeed = 70.0f;
 
-	gameObjectShape.setSize(size);
-	gameObjectShape.setFillColor(sf::Color::Red);
+	objectSprite.setScale(size);
+	objectSprite.setColor(sf::Color::Cyan);
 
-	objectTag = "Player";
+	objectTag = "GameCharacter";
 }
 
 
@@ -65,14 +65,15 @@ void GameCharacter::Jump()
 		//velocity.y = (-jumpSpeed) * delta;
 		isGrounded = false;
 		//velocity.y = -gravitySpeed *1.5f;
-		velocity.y = -jumpSpeed;
+		//velocity.y = -jumpSpeed;
+		velocity.y = (-jumpSpeed) * delta;
 		std::cout << "Character jumped" << std::endl;
 	}
 }
 
 void GameCharacter::MoveRight()
 {
-	std::cout << "Character move right" << std::endl;
+	//std::cout << "Character move right" << std::endl;
 	velocity.x = moveSpeed * delta;
 }
 
