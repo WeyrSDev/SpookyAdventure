@@ -1,20 +1,20 @@
 #pragma once
-#include "GameObject.h"
+#include "GameCharacter.h"
 
-class World;
 
-class Player : public GameObject
+
+class Player : public GameCharacter
 {
 public:
 	Player(sf::Vector2f, World& world);
 	~Player();
 
-	float jumpSpeed;
-	float moveSpeed;
+	void Update(float deltaTime);
 
-	void Update(float deltaTime) override;
 	void Jump();
+
 	void MoveRight();
+
 	void MoveLeft();
 
 private:

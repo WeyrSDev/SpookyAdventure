@@ -7,6 +7,7 @@
 
 World::World()
 {
+	playerScore = 0;
 
 	player = new Player({ 40,40 }, *this);
 	player->SetPosition({ 60,450 });
@@ -109,4 +110,14 @@ void World::DestroyObjectAt(int i)
 {
 	worldObjects.erase(worldObjects.begin() + i);
 	worldObjectCount--;
+}
+
+void World::GiveScore(int score)
+{
+	playerScore += score;
+}
+
+int World::GetScore()
+{
+	return playerScore;
 }

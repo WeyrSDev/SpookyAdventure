@@ -3,7 +3,7 @@
 
 Player::Player(sf::Vector2f size, World& world)
 {
-	GameObject::GameObject(size, world); // call parent constructor 
+	//GameObject::GameObject(size, world); // call parent constructor 
 
 	this->world = &world;
 
@@ -28,35 +28,7 @@ Player::~Player()
 
 void Player::Update(float deltaTime)
 {
-	GameObject::Update(deltaTime); // Call Base update
-	// DO THIS EVERY FRAME
-	//std::cout << "PLAYER UPDATE CALLED" << std::endl;
-
-	if (isGrounded) // apply friction if grounded
-	{
-		if (velocity.x > 0)
-		{
-			velocity.x -= 2.07f * delta;
-		}
-
-		if (velocity.x < 0)
-		{
-			velocity.x += 2.07f * delta;
-		}
-	}
-
-	if (isGrounded == false)
-	{
-		if (velocity.x > 0)
-		{
-			velocity.x -= 1.07f * delta;
-		}
-
-		if (velocity.x < 0)
-		{
-			velocity.x += 1.07f * delta;
-		}
-	}
+	GameCharacter::Update(deltaTime);
 
 	GameObject* closestObject = nullptr;
 
@@ -79,7 +51,8 @@ void Player::Update(float deltaTime)
 					if (world->GetWorldObjectList()[i] == closestObject)
 					{
 						// PICK UP COLLECTABLE
-						std::cout << "pick up" << std::endl;
+						world->GiveScore(50); // increase game score
+						std::cout << "Player Score is: " << world->GetScore() << std::endl;
 						world->DestroyObjectAt(i);
 					}
 				}
@@ -91,23 +64,15 @@ void Player::Update(float deltaTime)
 
 void Player::Jump()
 {
-	if (isGrounded)
-	{
-		//velocity.y = (-jumpSpeed) * delta;
-		isGrounded = false;
-		//velocity.y = -gravitySpeed *1.5f;
-		velocity.y = -jumpSpeed;
-		std::cout << "Player jumped" << std::endl;
-	}
+	GameCharacter::Jump();
 }
 
 void Player::MoveRight()
 {
-	std::cout << "Player move right" << std::endl;
-	velocity.x = moveSpeed * delta;
+	GameCharacter::MoveRight();
 }
 
 void Player::MoveLeft()
 {
-	velocity.x = -moveSpeed * delta;
+	GameCharacter::MoveLeft();
 }

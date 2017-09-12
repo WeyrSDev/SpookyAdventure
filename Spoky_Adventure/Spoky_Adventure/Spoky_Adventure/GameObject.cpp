@@ -8,7 +8,7 @@ GameObject::GameObject(sf::Vector2f size, World& world) // get reference to worl
 	this->world = &world;
 
 	gravityEnabled = false;
-	gravitySpeed = 2.0f;
+	gravitySpeed = 3.0f;
 
 	isGrounded = false;
 

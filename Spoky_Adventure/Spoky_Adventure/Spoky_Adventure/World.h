@@ -8,6 +8,7 @@ private:
 	std::vector<GameObject*> worldObjects;
 	int worldObjectCount = 0;
 	Player* player;
+	int playerScore;
 
 public:
 	World();
@@ -21,5 +22,8 @@ public:
 	std::vector<GameObject*> GetWorldObjectList();
 
 	void DestroyObjectAt(int i);
+
+	void GiveScore(int score);
+	int GetScore();
 };
 
