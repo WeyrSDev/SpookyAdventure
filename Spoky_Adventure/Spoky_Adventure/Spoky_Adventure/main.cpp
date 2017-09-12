@@ -39,7 +39,9 @@ int main()
 		sf::Time time = deltaClock.getElapsedTime();
 		float delta = time.asSeconds();
 
-		for (int i = 0; i < world->GetWorldObjectCount(); i++)
+		world->GetPlayer()->Update(delta);
+
+		for (int i = 1; i < world->GetWorldObjectCount(); i++)
 		{
 			world->GetWorldObjectList()[i]->Update(delta);
 		}
@@ -88,10 +90,12 @@ int main()
 
 			if (world)
 			{
-				for (int i = 0; i < world->GetWorldObjectCount(); i++)
+				for (int i = 1; i < world->GetWorldObjectCount(); i++)
 				{
 						world->GetWorldObjectList()[i]->DrawTo(window);
 				}
+
+				world->GetPlayer()->DrawTo(window);
 			}
 
 

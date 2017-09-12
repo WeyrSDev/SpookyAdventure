@@ -136,7 +136,18 @@ void GameObject::Update(float deltaTime)
 				}
 			}
 			else
-				closestObjects[i] = world->FindClosestObject(this);
+			{
+				auto object = world->FindClosestObject(this);
+
+				if (object == nullptr) { return; }
+				if ( object->GetObjectTag() == "Platform")
+				{
+					closestObjects[i] = world->FindClosestObject(this);
+				}
+				else
+					break;
+			}
+				
 		}
 	}
 
