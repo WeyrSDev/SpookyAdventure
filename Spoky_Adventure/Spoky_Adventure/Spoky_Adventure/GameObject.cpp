@@ -44,19 +44,20 @@ int GameObject::CheckCollisionWith(GameObject& other)
 	//if (GetShape().top <= other.GetPosition().y &&  GetShape().top - GetShape().height >= other.GetPosition().y - other.GetShape().height)
 	float otherBottom, otherTop, pBottom, pTop;
 	float otherLeft, otherRight, pLeft, pRight;
-	float offset = 3;
+	float topOffset = 3;
+	float sideOffset = 50;
 
-	pTop = GetShape().top - offset;
-	pBottom = (GetShape().top + GetShape().height) + offset;
+	pTop = GetShape().top - topOffset;
+	pBottom = (GetShape().top + GetShape().height) + topOffset;
 
-	otherTop = other.GetShape().top - offset;
-	otherBottom = (other.GetShape().top + GetShape().height) + offset;
+	otherTop = other.GetShape().top - topOffset;
+	otherBottom = (other.GetShape().top + GetShape().height) + topOffset;
 
-	otherLeft = other.GetShape().left - offset;
-	otherRight = (other.GetShape().left + other.GetShape().width) + offset;
+	otherLeft = other.GetShape().left - sideOffset;
+	otherRight = (other.GetShape().left + other.GetShape().width) + sideOffset;
 
-	pLeft = GetShape().left - offset;
-	pRight = (GetShape().left + GetShape().width) + offset;
+	pLeft = GetShape().left - topOffset;
+	pRight = (GetShape().left + GetShape().width) + topOffset;
 
 	if (pTop <= otherBottom && pTop > otherTop && pLeft >= otherLeft && pRight <= otherRight)
 	{

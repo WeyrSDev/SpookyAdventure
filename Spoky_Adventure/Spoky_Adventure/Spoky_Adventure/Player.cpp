@@ -18,7 +18,7 @@ Player::Player(sf::Vector2f size, World& world)
 
 	isGrounded = false;
 	//jumpSpeed = 3.0f;
-	jumpSpeed = 430.0f;
+	jumpSpeed = 450.0f;
 	moveSpeed = 130.0f;
 
 	//gravitySpeed = 3.0f;
@@ -28,7 +28,7 @@ Player::Player(sf::Vector2f size, World& world)
 	objectSprite.setTexture(objectTexture);
 
 	objectSprite.setScale(size);
-	objectSprite.setColor(sf::Color::Red);
+	objectSprite.setColor(sf::Color::Magenta);
 
 	objectTag = "Player";
 }
@@ -41,7 +41,7 @@ void Player::Update(float deltaTime)
 {
 	GameCharacter::Update(deltaTime);
 
-	GameObject* closestObject = nullptr;
+
 
 	// Get closest object
 	if (world)
@@ -54,7 +54,6 @@ void Player::Update(float deltaTime)
 	{
 		if (this->CheckCollisionWith(*closestObject) > 0)
 		{
-			// erase the 6th element
 			if (closestObject->GetObjectTag() == "Collectable")
 			{
 				for (int i = 0; i < world->GetWorldObjectCount(); i++)
@@ -69,6 +68,25 @@ void Player::Update(float deltaTime)
 				}
 			}
 		}
+
+		if (this->CheckCollisionWith(*closestObject) == 2)
+		{
+			if (closestObject->GetObjectTag() == "Enemy")
+			{
+				for (int i = 0; i < world->GetWorldObjectCount(); i++)
+				{
+					if (world->GetWorldObjectList()[i] == closestObject)
+					{
+						// PICK UP COLLECTABLE
+						Jump();
+						world->GiveScore(100); // increase game score
+						std::cout << "Player Score is: " << world->GetScore() << std::endl;
+						world->DestroyObjectAt(i);
+					}
+				}
+			}
+		}
+
 	}
 
 }

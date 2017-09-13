@@ -54,6 +54,7 @@ protected:
 
 	World* world;
 
+	GameObject* closestObject = nullptr;
 	GameObject* closestObjects [3];
 
 	sf::Sprite objectSprite;

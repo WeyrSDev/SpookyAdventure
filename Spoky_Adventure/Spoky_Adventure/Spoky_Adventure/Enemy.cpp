@@ -17,7 +17,7 @@ Enemy::Enemy(sf::Vector2f size, World & world)
 		throw std::runtime_error("Could not load fighter jet.png");
 	//gravityEnabled = true;
 
-	objectSprite.setOrigin(sf::Vector2f(objectSprite.getGlobalBounds().width / 2, objectSprite.getGlobalBounds().height));
+	objectSprite.setOrigin(sf::Vector2f(objectSprite.getGlobalBounds().width / 2, objectSprite.getGlobalBounds().top - objectSprite.getGlobalBounds().height));
 
 	isGrounded = false;
 	jumpSpeed = 3.0f;
