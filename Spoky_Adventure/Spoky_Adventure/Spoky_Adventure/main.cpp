@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <SFML/Graphics.hpp>
+#include <string>
 #include "World.h"
 #include "Player.h"
 #include "Platform.h"
@@ -20,6 +21,20 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Spooky Adventure");
 	sf::View view;
 	view.reset(sf::FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
+
+	// Declare and load a font
+	sf::Font uIFont;
+	uIFont.loadFromFile("DigitalSystem.ttf");
+
+
+	sf::Text PlayerUI;
+	PlayerUI.setFont(uIFont);
+	PlayerUI.setCharacterSize(42);
+	PlayerUI.setStyle(sf::Text::Bold);
+	string uiText = "Player Score: 1000";
+	PlayerUI.setString(uiText);
+	PlayerUI.setFillColor(sf::Color::Magenta);
+	
 
 	float viewCentreY = (WINDOW_HEIGHT / 2);
 	window.setFramerateLimit(120);
@@ -68,13 +83,22 @@ int main()
 			//cout << "jump pressed " << endl;
 		}
 
+		PlayerUI.setPosition(sf::Vector2f({view.getViewport().left + 20,view.getViewport().top + 20 }));
 
 
 
+		//window.draw(PlayerUI);
+
+
+		// MOVE CAMERA
 		if (world->GetPlayer()->GetXPosition() > view.getCenter().y)
 		{
 			view.move(sf::Vector2f({ world->GetPlayer()->GetVelocity().x, world->GetPlayer()->GetVelocity().y / 2 }));
 		}
+
+
+
+
 		deltaClock.restart().asSeconds();
 
 		window.setView(view);
@@ -98,6 +122,18 @@ int main()
 				world->GetPlayer()->DrawTo(window);
 			}
 
+			// Set the default view back
+			window.setView(window.getDefaultView());
+
+
+			//DRAW UI
+			// Render stuff not affected by the view
+			// UPDATE SCORE
+			uiText = "Player score: ";// + world->GetScore();
+			string scoreTxt = std::to_string(world->GetScore());
+			uiText += scoreTxt;
+			PlayerUI.setString(uiText);
+			window.draw(PlayerUI);
 
 		window.display();
 		window.clear();

@@ -11,7 +11,7 @@ Player::Player(sf::Vector2f size, World& world)
 	std::cout << "Player Constructor called" << std::endl;
 
 	if (!objectTexture.loadFromFile("wood.jpeg"))
-		throw std::runtime_error("Could not load fighter jet.png");
+		throw std::runtime_error("Could not load wood.jpeg");
 
 
 	gravityEnabled = true; // Enable object gravity
@@ -105,3 +105,5 @@ void Player::MoveLeft()
 {
 	GameCharacter::MoveLeft();
 }
+
+
